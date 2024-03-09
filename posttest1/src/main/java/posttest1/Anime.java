@@ -7,171 +7,173 @@ import java.util.ArrayList;
 import java.util.Arrays;
 
 public class Anime {
-	String title;
-	String studio;
-	int episode;
-	Season season;
-	ArrayList<String> genres;
+    String title;
+    String studio;
+    int episode;
+    Season season;
+    ArrayList<Genre> genres;
 
-	Anime(String title, String studio, int episode, Season season, ArrayList<String> genres) {
-		this.title = title;
-		this.studio = studio;
-		this.episode = episode;
-		this.season = season;
-		this.genres = genres;
-	}
+    Anime(String title, String studio, int episode, Season season,
+            ArrayList<Genre> genres) {
+        this.title = title;
+        this.studio = studio;
+        this.episode = episode;
+        this.season = season;
+        this.genres = genres;
+    }
 
-	public static Anime createInteractive() throws IOException {
-		BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
+    public static Anime createInteractive() throws IOException {
+        BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
 
-		System.out.print("Masukkan judul anime: ");
-		String title = reader.readLine();
+        System.out.print("Masukkan judul anime: ");
+        String title = reader.readLine();
 
-		System.out.print("Masukkan studio anime: ");
-		String studio = reader.readLine();
+        System.out.print("Masukkan studio anime: ");
+        String studio = reader.readLine();
 
-		int episode;
-		while (true) {
-			System.out.print("Masukkan jumlah episode: ");
-			try {
-				episode = Integer.parseInt(reader.readLine());
-			} catch (NumberFormatException e) {
-				Utils.enterToContinue("Masukkan episode berupa angka.");
-				continue;
-			}
+        int episode;
+        while (true) {
+            System.out.print("Masukkan jumlah episode: ");
+            try {
+                episode = Integer.parseInt(reader.readLine());
+            } catch (NumberFormatException e) {
+                Utils.enterToContinue("Masukkan episode berupa angka.");
+                continue;
+            }
 
-			break;
-		}
+            break;
+        }
 
-		Season season = inputSeasonInteractive();
+        Season season = inputSeasonInteractive();
 
-		ArrayList<String> genres = inputGenresInteractive();
+        ArrayList<Genre> genres = inputGenresInteractive();
 
-		Anime anime = new Anime(title, studio, episode, season, genres);
-		return anime;
-	}
+        Anime anime = new Anime(title, studio, episode, season, genres);
+        return anime;
+    }
 
-	public static Season inputSeasonInteractive() throws IOException {
-		BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
+    public static Season inputSeasonInteractive() throws IOException {
+        BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
 
-		SeasonEnum name = null;
-		int year;
+        SeasonEnum name = null;
+        int year;
 
-		while (true) {
-			System.out.println("Pilihan Season");
-			System.out.println("[1] Winter");
-			System.out.println("[2] Spring");
-			System.out.println("[3] Summer");
-			System.out.println("[4] Fall");
+        while (true) {
+            System.out.println("Pilihan Season");
+            System.out.println("[1] Winter");
+            System.out.println("[2] Spring");
+            System.out.println("[3] Summer");
+            System.out.println("[4] Fall");
 
-			System.out.print("Season: ");
-			String inputSeason = reader.readLine();
+            System.out.print("Season: ");
+            String inputSeason = reader.readLine();
 
-			// by names
-			for (SeasonEnum se : SeasonEnum.values()) {
-				if (se.toString().toLowerCase().equals(inputSeason.toLowerCase())) {
-					name = se;
-				}
-			}
+            // by names
+            for (SeasonEnum se : SeasonEnum.values()) {
+                if (se.toString().toLowerCase().equals(inputSeason.toLowerCase())) {
+                    name = se;
+                }
+            }
 
-			// by choices
-			switch (inputSeason) {
-				case "1":
-					name = SeasonEnum.WINTER;
-					break;
-				case "2":
-					name = SeasonEnum.SPRING;
-				case "3":
-					name = SeasonEnum.SUMMER;
-				case "4":
-					name = SeasonEnum.FALL;
-			}
+            // by choices
+            switch (inputSeason) {
+                case "1":
+                    name = SeasonEnum.WINTER;
+                    break;
+                case "2":
+                    name = SeasonEnum.SPRING;
+                case "3":
+                    name = SeasonEnum.SUMMER;
+                case "4":
+                    name = SeasonEnum.FALL;
+            }
 
-			if (name == null) {
-				Utils.enterToContinue("Season yang diinputkan tidak valid");
-				continue;
-			}
+            if (name == null) {
+                Utils.enterToContinue("Season yang diinputkan tidak valid");
+                continue;
+            }
 
-			break;
-		}
+            break;
+        }
 
-		// year.
-		while (true) {
-			System.out.print("Masukkan tahun anime: ");
-			try {
-				year = Integer.parseInt(reader.readLine());
+        // year.
+        while (true) {
+            System.out.print("Masukkan tahun anime: ");
+            try {
+                year = Integer.parseInt(reader.readLine());
 
-				// first anime was in 1917
-				if (year < 1917) {
-					throw new IllegalArgumentException();
-				}
-			} catch (Exception e) {
-				Utils.enterToContinue("Tahun tidak valid.");
-				continue;
-			}
+                // first anime was in 1917
+                if (year < 1917) {
+                    throw new IllegalArgumentException();
+                }
+            } catch (Exception e) {
+                Utils.enterToContinue("Tahun tidak valid.");
+                continue;
+            }
 
-			break;
-		}
+            break;
+        }
 
-		Season s = new Season(name, year);
-		return s;
-	}
+        Season s = new Season(name, year);
+        return s;
+    }
 
-	public static ArrayList<String> inputGenresInteractive() throws IOException {
-		String[] genres = { "Comedy", "Action", "Adventure", "Drama", "Fantasy", "Romance", "Sci-Fi" };
-		ArrayList<String> selected = new ArrayList<>();
+    public static ArrayList<Genre> inputGenresInteractive() throws IOException {
+        Genre[] genres = Genre.genres;
 
-		BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
+        ArrayList<Genre> selected = new ArrayList<>();
 
-		outer: while (true) {
-			Utils.clearConsole();
-			// This will filter genres that are already selected
-			genres = Arrays.stream(genres).filter(genre -> selected.indexOf(genre) == -1)
-					.toArray(String[]::new);
+        BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
 
-			if (selected.size() > 0) {
-				System.out.print("Genre yang telah dipilih: ");
-				System.out.println(String.join(", ", selected));
-			}
+        outer: while (true) {
+            Utils.clearConsole();
+            // This will filter genres that are already selected
+            genres = Arrays.stream(genres)
+                    .filter(genre -> selected.indexOf(genre) == -1)
+                    .toArray(Genre[]::new);
 
-			System.out.println("Pilihan Genre");
-			System.out.println("[0] Selesai Memilih");
-			for (int i = 0; i < genres.length; i++) {
-				System.out.println(String.format("[%d] %s", i + 1, genres[i]));
-			}
+            if (selected.size() > 0) {
+                System.out.print("Genre yang telah dipilih: ");
+                System.out.println(Genre.join(", ", selected));
+            }
 
-			System.out.print("Input: ");
-			String genreInput = reader.readLine();
+            System.out.println("Pilihan Genre");
+            System.out.println("[0] Selesai Memilih");
+            for (int i = 0; i < genres.length; i++) {
+                System.out.println(String.format("[%d] %s", i + 1, genres[i]));
+            }
 
-			if (genreInput.equals("0")) {
-				if (selected.size() == 0) {
-					Utils.enterToContinue("Masukkan genre terlebih dahulu.");
-					continue;
-				}
+            System.out.print("Input: ");
+            String genreInput = reader.readLine();
 
-				break;
-			}
+            if (genreInput.equals("0")) {
+                if (selected.size() == 0) {
+                    Utils.enterToContinue("Masukkan genre terlebih dahulu.");
+                    continue;
+                }
 
-			// by names
-			for (String genre : genres) {
-				if (genre.toLowerCase().equals(genreInput.toLowerCase())) {
-					selected.add(genre);
-					continue outer;
-				}
-			}
+                break;
+            }
 
-			// by numbers
-			try {
-				int idx = Integer.parseInt(genreInput);
-				selected.add(genres[idx - 1]);
-			} catch (Exception e) {
-				Utils.enterToContinue(String.format("'%s' bukan pilihan yang valid.", genreInput));
-				continue;
-			}
+            // by names
+            for (Genre g : genres) {
+                if (g.name.toLowerCase().equals(genreInput.toLowerCase())) {
+                    selected.add(g);
+                    continue outer;
+                }
+            }
 
-		}
+            // by numbers
+            try {
+                int idx = Integer.parseInt(genreInput);
+                selected.add(genres[idx - 1]);
+            } catch (Exception e) {
+                Utils.enterToContinue(
+                        String.format("'%s' bukan pilihan yang valid.", genreInput));
+                continue;
+            }
+        }
 
-		return selected;
-	}
-
+        return selected;
+    }
 }

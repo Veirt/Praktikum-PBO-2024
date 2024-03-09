@@ -4,21 +4,11 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
-import java.util.Arrays;
 
 public class Main {
     static ArrayList<Anime> animeList = new ArrayList<>();
 
     public static void main(String[] args) throws IOException {
-        animeList.add(new Anime("Grimgar", "A-1 Pictures", 12,
-                new Season(SeasonEnum.WINTER, 2016),
-                new ArrayList<>(Arrays.asList("Action"))));
-        animeList.add(new Anime("Onimai", "Studio Bind", 12,
-                new Season(SeasonEnum.WINTER, 2023),
-                new ArrayList<>(Arrays.asList("Comedy"))));
-        animeList.add(new Anime("New Game!", "Doga Kobo", 12,
-                new Season(SeasonEnum.SUMMER, 2016),
-                new ArrayList<>(Arrays.asList("Comedy"))));
 
         BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
 
@@ -77,7 +67,6 @@ public class Main {
             } catch (Exception e) {
                 System.out.println("Pilihan menu tidak valid.");
             }
-
         }
 
         reader.close();
@@ -106,7 +95,7 @@ public class Main {
             System.out.println("Studio\t: " + anime.studio);
             System.out.println("Episode\t: " + anime.episode);
             System.out.println("Season\t: " + anime.season.toString());
-            System.out.println("Genre\t: " + String.join(", ", anime.genres));
+            System.out.println("Genre\t: " + Genre.join(", ", anime.genres));
             System.out.println("=================");
 
             num++;
