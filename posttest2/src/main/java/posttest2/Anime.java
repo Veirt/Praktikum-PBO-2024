@@ -6,6 +6,9 @@ import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.Arrays;
 
+import de.vandermeer.asciitable.AsciiTable;
+import de.vandermeer.asciitable.CWC_LongestLine;
+
 public class Anime {
     String title;
     String studio;
@@ -52,18 +55,29 @@ public class Anime {
         return anime;
     }
 
+    public static void seasonMenu() {
+        AsciiTable at = new AsciiTable();
+        at.getRenderer().setCWC(new CWC_LongestLine());
+
+        at.addRule();
+        at.addRow("No", "Season");
+        at.addRule();
+        at.addRow("1", "Winter");
+        at.addRow("2", "Spring");
+        at.addRow("3", "Summer");
+        at.addRow("4", "Fall");
+        at.addRule();
+
+        System.out.println(at.render());
+    }
+
     public static Season inputSeasonInteractive() throws IOException {
         BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
 
-        Season season = new Season(null, 0);
+        Season season = new Season();
 
         while (true) {
-            System.out.println("Pilihan Season");
-            System.out.println("[1] Winter");
-            System.out.println("[2] Spring");
-            System.out.println("[3] Summer");
-            System.out.println("[4] Fall");
-
+            seasonMenu();
             System.out.print("Season: ");
             String inputSeason = reader.readLine();
 
@@ -114,10 +128,18 @@ public class Anime {
             }
 
             System.out.println("Pilihan Genre");
-            System.out.println("[0] Selesai Memilih");
+
+            AsciiTable at = new AsciiTable();
+            at.addRule();
+            at.addRow(0, "Selesai Memilih");
+            at.addRule();
+
             for (int i = 0; i < genres.length; i++) {
-                System.out.println(String.format("[%d] %s", i + 1, genres[i]));
+                at.addRow(i + 1, genres[i].getName());
+                at.addRule();
             }
+
+            System.out.println(at.render());
 
             System.out.print("Input: ");
             String genreInput = reader.readLine();

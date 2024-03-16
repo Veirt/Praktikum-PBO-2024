@@ -4,8 +4,18 @@ public class Season {
 	private SeasonEnum name;
 	private int year;
 
+	Season() {
+		this.name = null;
+		this.year = 0;
+	}
+
 	Season(SeasonEnum name, int year) {
 		this.name = name;
+		this.year = year;
+	}
+
+	Season(String name, int year) {
+		this.setSeason(name);
 		this.year = year;
 	}
 

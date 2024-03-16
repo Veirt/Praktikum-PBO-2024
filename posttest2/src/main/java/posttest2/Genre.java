@@ -20,6 +20,20 @@ public class Genre {
         this.descrpition = description;
     }
 
+    public static ArrayList<Genre> getGenreObjects(String... genreNames) {
+        ArrayList<Genre> genres = new ArrayList<>();
+        for (String genreName : genreNames) {
+            for (Genre genre : Genre.genres) {
+                if (genre.getName().equalsIgnoreCase(genreName)) {
+                    genres.add(genre);
+                    break;
+                }
+            }
+        }
+
+        return genres;
+    }
+
     public String getName() {
         return this.name;
     }
@@ -36,13 +50,9 @@ public class Genre {
         this.descrpition = description;
     }
 
-    public String toString() {
-        return this.name;
-    }
-
     public static String join(String delimiter, ArrayList<Genre> genres) {
         return String.join(
                 delimiter,
-                genres.stream().map(Genre::toString).toArray(String[]::new));
+                genres.stream().map(Genre::getName).toArray(String[]::new));
     }
 }

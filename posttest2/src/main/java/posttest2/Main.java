@@ -3,13 +3,28 @@ package posttest2;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.ArrayList;
+
+import de.vandermeer.asciitable.AsciiTable;
+import de.vandermeer.asciitable.CWC_LongestLine;
+import de.vandermeer.skb.interfaces.transformers.textformat.TextAlignment;
 
 public class Main {
     static ArrayList<Anime> animeList = new ArrayList<>();
 
-    public static void main(String[] args) throws IOException {
+    public static String getHeader() throws IOException {
+        return new String(Files.readAllBytes(Paths.get("./header.txt")));
+    }
 
+    public static void main(String[] args) throws IOException {
+        animeList.add(
+                new Anime("Onimai", "Studio Bind", 12,
+                        new Season("Winter", 2023),
+                        Genre.getGenreObjects("Comedy")));
+
+        Utils.clearConsole();
         BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
 
         while (true) {
@@ -87,18 +102,27 @@ public class Main {
     }
 
     public static void readAnime() {
+        AsciiTable at = new AsciiTable();
+        at.getRenderer().setCWC(new CWC_LongestLine());
+
+        at.addRule();
+        at.addRow("No", "Title", "Studio", "Episode", "Season", "Genre");
+        at.addRule();
+
         int num = 1;
         for (Anime anime : animeList) {
-            System.out.println("No\t: " + num);
-            System.out.println("Judul\t: " + anime.title);
-            System.out.println("Studio\t: " + anime.studio);
-            System.out.println("Episode\t: " + anime.episode);
-            System.out.println("Season\t: " + anime.season.toString());
-            System.out.println("Genre\t: " + Genre.join(", ", anime.genres));
-            System.out.println("=================");
+            at.addRow(num, anime.title, anime.studio, anime.episode,
+                    anime.season.toString(), Genre.join(", ", anime.genres));
+            at.setPaddingLeft(2);
+            at.setPaddingRight(2);
+            at.addRule();
 
             num++;
         }
+
+        at.setTextAlignment(TextAlignment.CENTER);
+        System.out.println(at.render());
+
     }
 
     public static void updateAnime(int idx, Anime newAnime) {
