@@ -11,6 +11,7 @@ import de.vandermeer.skb.interfaces.transformers.textformat.TextAlignment;
 
 public class Main {
     static ArrayList<Anime> animeList = new ArrayList<>();
+    static BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
 
     public static void main(String[] args) throws IOException {
         AnimeShow onimai = new AnimeShow("Onimai", "Studio Bind", Genre.getGenreObjects("Comedy"), 12,
@@ -22,7 +23,6 @@ public class Main {
         animeList.add(suzume);
 
         Utils.clearConsole();
-        BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
 
         while (true) {
             menu();
@@ -101,27 +101,46 @@ public class Main {
         animeList.add(anime);
     }
 
-    public static void readAnime() {
-        AsciiTable at = new AsciiTable();
-        at.getRenderer().setCWC(new CWC_LongestLine());
+    public static void readAnime() throws IOException {
 
-        at.addRule();
-        at.addRow("No", "Title", "Studio", "Episode", "Season / Airing Date", "Genre");
-        at.addRule();
+        System.out.println("Read Format");
+        System.out.println("[1] Table");
+        System.out.println("[2] List");
+        System.out.print("Masukkan pilihan: ");
+        int choice = Integer.parseInt(reader.readLine());
+        Utils.clearConsole();
 
         int num = 1;
-        for (Anime anime : animeList) {
-            anime.displayRow(at, num);
+        if (choice == 1) {
+            AsciiTable at = new AsciiTable();
+            at.getRenderer().setCWC(new CWC_LongestLine());
 
-            at.setPaddingLeft(2);
-            at.setPaddingRight(2);
+            at.addRule();
+            at.addRow("No", "Title", "Studio", "Episode", "Season / Airing Date", "Genre");
             at.addRule();
 
-            num++;
-        }
+            for (Anime anime : animeList) {
+                anime.displayRow(at, num);
 
-        at.setTextAlignment(TextAlignment.CENTER);
-        System.out.println(at.render());
+                at.setPaddingLeft(2);
+                at.setPaddingRight(2);
+                at.addRule();
+
+                num++;
+            }
+
+            at.setTextAlignment(TextAlignment.CENTER);
+            System.out.println(at.render());
+        } else if (choice == 2) {
+            for (Anime anime : animeList) {
+                anime.display(num);
+
+                num++;
+            }
+
+        } else {
+            throw new IllegalArgumentException();
+        }
 
     }
 

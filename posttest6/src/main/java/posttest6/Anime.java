@@ -30,6 +30,8 @@ public abstract class Anime {
     // Abstract method
     public abstract void displayRow(AsciiTable at, int num);
 
+    public abstract void display(int num);
+
     // Final pada method
     public final static Anime createInteractive() throws IOException {
         BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
